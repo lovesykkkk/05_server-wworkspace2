@@ -7,6 +7,13 @@ import com.kh.member.model.dao.MemberDao;
 import com.kh.member.model.vo.Member;
 
 public class MemberService {
+	
+	/**
+	 * 로그인 메소드
+	 * @param userId
+	 * @param userPwd
+	 * @return
+	 */
 	public Member loginMember(String userId, String userPwd) {
 		
 		Connection conn = /*JDBCTemplate.*/getConnection();
@@ -18,6 +25,11 @@ public class MemberService {
 		
 	}
 	
+	/**
+	 * 회원가입 메소드
+	 * @param m
+	 * @return
+	 */
 	public int insertMember(Member m) {
 		Connection conn = getConnection();
 		int result = new MemberDao().insertMember(conn, m);
@@ -31,6 +43,30 @@ public class MemberService {
 		close(conn);
 		
 		return result;
+	}
+	
+	/**
+	 * 회원정보 수정
+	 * @param m
+	 * @return
+	 */
+	public Member updateMember(Member m) {
+		Connection conn = getConnection();
+		
+		int result = new MemberDao().updateMember(conn, m);
+		
+		Member updateMem = null;
+		if(result>0) { // 성공
+			commit(conn);
+			// 갱신된 회원 객체 다시 조회해오기
+			updateMem = new MemberDao().selectMember(conn, m.getUserId());
+		}else {
+			rollback(conn);
+		}
+		close(conn);
+		
+		return updateMem;
+		
 	}
 }
 

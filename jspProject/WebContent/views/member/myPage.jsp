@@ -29,7 +29,7 @@
     	String email = (loginUser.getEmail() == null) ? "" : loginUser.getEmail();
     	String address = (loginUser.getAddress() == null) ? "" : loginUser.getAddress();
     	String interest = (loginUser.getInterest() == null) ? "" : loginUser.getInterest();
-    	// "운동, 등산, 영화"
+    	// "운동, 등산, 영화" | ""
     	
     %>
 
@@ -38,7 +38,7 @@
         <br>
         <h2 align = "center">마이페이지</h2>
 
-        <form id="mypage-form" action="" method="post">
+        <form id="mypage-form" action="<%= contextPath %>/update.me" method="post">
 
             <table>
                 <tr>
@@ -88,6 +88,22 @@
                     </td>
                 </tr>
             </table>
+            
+            <script>
+            	$(function(){
+            		const interest = "<%= interest %>";
+            		// 현재 로그인한 회원의 관심분야들
+            		// "" | "운동,등산,게임"
+            		
+            		$("input[type=checkbox]").each(function(){
+            			// $(this) : 순차적으로 접근되는 체크박스요소
+            			// $(this).val() : 해당 체크박스의 value 값
+            			if(interest.search($(this).val()) != -1){
+            				$(this).attr("checked", true);
+            			}
+            		})
+            	})
+            </script>
 
             <br><br>
 

@@ -24,6 +24,13 @@ public class MemberDao {
 		}
 	}
 	
+	/**
+	 * 로그인 메소드
+	 * @param conn
+	 * @param userId
+	 * @param userPwd
+	 * @return
+	 */
 	public Member loginMember(Connection conn, String userId, String userPwd) {
 		// select 문 => ResultSet 객체 (한행) => Member 객체
 		Member m = null;
@@ -69,6 +76,12 @@ public class MemberDao {
 		
 	}
 	
+	/**
+	 * 회원가입 메소드
+	 * @param conn
+	 * @param m
+	 * @return
+	 */
 	public int insertMember(Connection conn, Member m) {
 		// insert문 => 처리된 행 수 => 트랜젝션 처리
 		int result = 0;
@@ -97,6 +110,83 @@ public class MemberDao {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * 회원정보 수정 메소드
+	 * @param conn
+	 * @param m
+	 * @return
+	 */
+	public int updateMember(Connection conn, Member m) {
+		// update문 => 처리된 행수 => 트랜젝션 처리
+		
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("updateMember");
+		
+		try {
+			pstmt = conn.prepareStatement(sql); // 미완성된 sql문
+			
+			pstmt.setString(1, m.getUserName());
+			pstmt.setString(2, m.getPhone());
+			pstmt.setString(3, m.getEmail());
+			pstmt.setString(4, m.getAddress());
+			pstmt.setString(5, m.getInterest());
+			pstmt.setString(6, m.getUserId());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+		
+		
+	}
+	
+	public Member selectMember(Connection conn, String userId) {
+		// select문 => ResultSet => 한행 => Member 객체
+		Member m = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("selectMember");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, userId);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				m = new Member(rset.getInt("user_no"),
+						   rset.getString("user_id"),
+						   rset.getString("user_pwd"),
+						   rset.getString("user_name"),
+						   rset.getString("phone"),
+						   rset.getString("email"),
+						   rset.getString("address"),
+						   rset.getString("interest"),
+						   rset.getDate("enroll_date"),
+						   rset.getDate("modify_date"),
+						   rset.getString("status"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return m;
+		
+		
+		
 	}
 }
 
