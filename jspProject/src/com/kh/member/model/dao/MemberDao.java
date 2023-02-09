@@ -149,6 +149,12 @@ public class MemberDao {
 		
 	}
 	
+	/**
+	 * 회원조회
+	 * @param conn
+	 * @param userId
+	 * @return
+	 */
 	public Member selectMember(Connection conn, String userId) {
 		// select문 => ResultSet => 한행 => Member 객체
 		Member m = null;
@@ -185,6 +191,31 @@ public class MemberDao {
 		
 		return m;
 		
+		
+		
+	}
+	
+	public int updatePwd(Connection conn, String userId, String userPwd, String updatePwd) {
+		// update문 => 처로된 행수 => 트랜젝션 처리
+		
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("updatePwd");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, updatePwd);
+			pstmt.setString(2, userId);
+			pstmt.setString(3, userPwd);
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
 		
 		
 	}
