@@ -24,6 +24,10 @@
         text-align: center;
 
     }
+    .list-area>tbody>tr:hover{
+    	background-color: gray;
+    	cursor:pointer
+    }
 </style>
 </head>
 <body>
@@ -77,6 +81,32 @@
             </tbody>
         </table>
     </div>
+    
+    <script>
+    	$(function(){
+    		$(".list-area>tbody>tr").click(function(){
+    			const num = $(this).children().eq(0).text();
+    			//console.log(num);
+    			
+    			// 요청할 url?키=벨류&키=벨류
+    			// 요청시 전달값 (키=벨류) == 쿼리스트링
+    			
+    			// /jsp/detail.no?num=클릭한글번호
+    			location.href = '<%= contextPath %>/detail.no?num=' + num;		
+    			
+    			// 404 뜰텐데 url요청 잘 되는지 확인해보기
+    		})
+    	})
+    
+    </script>
+    
 
 </body>
 </html>
+
+
+
+
+
+
+
