@@ -110,7 +110,7 @@
             <div align="center">
                 <button type="submit" class="btn btn-sm btn-secondary">정보변경</button>
                 <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#updatePwdModal">비밀번호변경</button>
-                <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal">회원탈퇴</button>
+                <button type="button" class="btn btn-sm btn-danger"  data-keyboard="false" data-target="#deleteModal">회원탈퇴</button>
             </div>
 
             <br><br>
@@ -119,7 +119,7 @@
     </div>
     
 	<!-- 비밀번호 변경용 Modal -->
-	<div class="modal" id="updatePwdModal">
+	<div class="modal" id="updatePwdModal" data-toggle="modal" data-backdrop = "static">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	
