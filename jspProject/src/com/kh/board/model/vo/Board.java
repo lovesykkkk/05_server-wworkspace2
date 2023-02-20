@@ -12,6 +12,8 @@ public class Board {
 	private String createDate; // to_date 써보기위해 string으로 해보자
 	private String status;
 	
+	private String titleImg; // 대표이미지를 보관할 필드
+	
 	public Board() {}
 
 	public Board(int boardNo, int boardType, String category, String boardTitle, String boardContent,
@@ -51,6 +53,14 @@ public class Board {
 		this.boardContent = boardContent;
 		this.boardWriter = boardWriter;
 		this.createDate = createDate;
+	}
+
+	public String getTitleImg() {
+		return titleImg;
+	}
+
+	public void setTitleImg(String titleImg) {
+		this.titleImg = titleImg;
 	}
 
 	public int getBoardNo() {
