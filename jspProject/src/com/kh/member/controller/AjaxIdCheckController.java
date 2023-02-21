@@ -1,28 +1,25 @@
-package com.kh.board.controller;
+package com.kh.member.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.kh.board.model.service.BoardService;
-import com.kh.board.model.vo.Board;
+import com.kh.member.model.service.MemberService;
 
 /**
- * Servlet implementation class ThumbnailListController
+ * Servlet implementation class AjaxIdCheckController
  */
-@WebServlet("/list.th")
-public class ThumbnailListController extends HttpServlet {
+@WebServlet("/idCheck.me")
+public class AjaxIdCheckController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ThumbnailListController() {
+    public AjaxIdCheckController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,15 +28,15 @@ public class ThumbnailListController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String checkId = request.getParameter("checkId");
 		
-		// thumbnailListView.jsp 상에 필요한 데이터 조회해서 가야됨
-		// 나중에 추가할 예정
+		int count = new MemberService().idCheck(checkId);
 		
-		ArrayList<Board> list = new BoardService().selectThumbnailList();
-		// 리스트 담아서 thumbnailListView.jsp로 가기
-		request.setAttribute("list", list);
-		
-		request.getRequestDispatcher("views/board/thumbnailListView.jsp").forward(request, response);
+		if(count > 0) { // 존재하는 아디가 있따 => 사용 불가 => "NNNNN"
+			response.getWriter().print("NNNNN");
+		}else { // 존재하는 아디 없음 => 사용가능 => "NNNNY"
+			response.getWriter().print("NNNNY");
+		}
 	}
 
 	/**

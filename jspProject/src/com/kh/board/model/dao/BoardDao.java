@@ -460,10 +460,54 @@ public class BoardDao {
 			rset = pstmt.executeQuery();
 			
 			// 조회 결과들 뽑아서 list 담아서 반환
+			while(rset.next()) {
+				Board b = new Board();
+				b.setBoardNo(rset.getInt("board_no"));
+				b.setBoardTitle(rset.getString("board_title"));
+				b.setCount(rset.getInt("count"));
+				b.setTitleImg(rset.getString("titleimg"));
+				
+				list.add(b);
+				
+			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
 		}
+		
+		return list;
+	}
+	
+	public ArrayList<Attachment> selectAttachmentList(Connection conn, int boardNo){
+		ArrayList<Attachment> list = new ArrayList<Attachment>();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		String sql = prop.getProperty("selectAttachment");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, boardNo);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				Attachment at = new Attachment();
+				at.setChangeName(rset.getString("change_name"));
+				at.setFilePath(rset.getString("file_path"));
+				
+				list.add(at);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return list;
 	}
 }
 

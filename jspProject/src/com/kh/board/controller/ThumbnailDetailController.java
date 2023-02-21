@@ -10,19 +10,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kh.board.model.service.BoardService;
+import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
 
 /**
- * Servlet implementation class ThumbnailListController
+ * Servlet implementation class ThumbnailDetailController
  */
-@WebServlet("/list.th")
-public class ThumbnailListController extends HttpServlet {
+@WebServlet("/detail.th")
+public class ThumbnailDetailController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ThumbnailListController() {
+    public ThumbnailDetailController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,15 +32,24 @@ public class ThumbnailListController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int boardNo = Integer.parseInt(request.getParameter("bno"));
 		
-		// thumbnailListView.jsp 상에 필요한 데이터 조회해서 가야됨
-		// 나중에 추가할 예정
+		BoardService bService = new BoardService();
+		int result = bService.increaseCount(boardNo);
 		
-		ArrayList<Board> list = new BoardService().selectThumbnailList();
-		// 리스트 담아서 thumbnailListView.jsp로 가기
-		request.setAttribute("list", list);
-		
-		request.getRequestDispatcher("views/board/thumbnailListView.jsp").forward(request, response);
+		if(result > 0) { // 유효한 게시글 => 상세페이지
+			
+			Board b = bService.selectBoard(boardNo);
+			ArrayList<Attachment> list  = bService.selectAttachmentList(boardNo);
+			
+			request.setAttribute("b", b);
+			request.setAttribute("list", list);
+			
+			request.getRequestDispatcher("views/board/thumbnailDetailView.jsp").forward(request, response);
+			
+		}else {
+			
+		}
 	}
 
 	/**
