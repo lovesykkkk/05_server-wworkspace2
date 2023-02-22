@@ -20,7 +20,7 @@
         background-color: black;
         color: white;
         width: 1000px;
-        height: 550px;
+        height: auto;
         margin: auto;
         margin-top: 50px;
     }
@@ -80,6 +80,76 @@
 	            <a href="#" class = "btn btn-sm btn-danger">삭제하기</a>
             <% } %>
         </div>
+        
+        <br>
+        
+        <div id="reply-area">
+            <table border="1" align="center">
+                <thead>
+                    <tr>
+                        <th>댓글작성</th>
+                        <td>
+                            <textarea rows="3" cols="50" style="resize: none;"></textarea>
+                        </td>
+                        <td><button>댓글등록</button></td>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+            
+            <script>
+            
+            	$(function(){
+            		console.log("Ddd");
+            		selectReplyList();
+            	});
+            
+            	// ajax로 해당 게시글에 딸린 댓글 목록 조회용
+            	function selectReplyList(){
+            		$.ajax({
+            			url:"rlist.bo",
+            			data:{bno: <%=b.getBoardNo()%>},
+            			success:function(list){
+            				let value = "";
+            				for(let i=0; i<list.length; i++){
+            					value += "<tr>" 
+            					           + "<td>" + list[i].replyWriter + "</td>"
+            					           + "<td>" + list[i].replyContent + "</td>"
+            					           + "<td>" + list[i].createDate + "</td>"
+            					           + "</tr>";
+            				}
+            				
+            				$("#reply-area tbody").html(value);
+            			},
+            			error:function(){
+            				console.log("ajax 통신 실패");
+            			}
+            		});
+            	}
+            </script>
+            
+            
+            
+            
+        </div>
+        
+        
+        
+        
     </div>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
