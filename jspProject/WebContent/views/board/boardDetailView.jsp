@@ -88,10 +88,18 @@
                 <thead>
                     <tr>
                         <th>댓글작성</th>
-                        <td>
-                            <textarea rows="3" cols="50" style="resize: none;"></textarea>
-                        </td>
-                        <td><button>댓글등록</button></td>
+                        
+                        <% if(loginUser != null) { //로그인이 되어 있을 경우 %>
+	                        <td>
+	                            <textarea id="replyContent" rows="3" cols="50" style="resize: none;"></textarea>
+	                        </td>
+	                        <td><button onclick="insertReply();">댓글등록</button></td>
+                        <% }else{ %>
+	                        <td>
+		                            <textarea rows="3" cols="50" style="resize: none;" readonly>로그인 후 이용가능한 서비스 입니다.</textarea>
+		                        </td>
+		                        <td><button disabled>댓글등록</button></td>
+		                <% } %>        
                     </tr>
                 </thead>
                 <tbody>
@@ -102,9 +110,32 @@
             <script>
             
             	$(function(){
-            		console.log("Ddd");
             		selectReplyList();
+            		
+            		setInterval(selectReplyList, 1000); // 시크릿모드
             	});
+            	
+            	// ajax로 댓글 작성용
+            	function insertReply(){
+            		
+            		$.ajax({
+            			url:"rinsert.bo",
+            			data:{
+            				content:$("#replyContent").val(),
+            				bno:<%=b.getBoardNo()%> // userNo : 로그인안한경우에는 널포인트 날수도 있음
+            			},
+            			type:"post",
+            			success:function(result){
+            				if(result > 0){ // 댓글작성 성공 =>
+            					selectReplyList();
+            					$("#replyContent").val("");
+            				}
+            			},
+            			error:function(){
+            				console.log("댓글 작성용 ajax 통신 실패!");
+            			}
+            		})
+            	}
             
             	// ajax로 해당 게시글에 딸린 댓글 목록 조회용
             	function selectReplyList(){
