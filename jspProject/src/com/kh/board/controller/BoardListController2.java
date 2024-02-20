@@ -40,6 +40,7 @@ public class BoardListController2 extends HttpServlet {
 		
 		request.getRequestDispatcher("views/board/boardListView2.jsp").forward(request, response);
 		
+		int a = "";
 	}
 
 	/**
